@@ -1,5 +1,3 @@
-
-
 function About() {
   return (
     <main>
@@ -7,7 +5,7 @@ function About() {
         This is my about component!
       </h1>
     </main>
-  );
+  )
 }
 
-export default About;
+export default About

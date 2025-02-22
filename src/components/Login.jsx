@@ -1,20 +1,14 @@
-import { useState } from "react";
+import { useState } from "react"
 
 function Login() {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
+  const [username, setUsername] = useState("")
 
   function handleChange(e) {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setUsername(e.target.value)
   }
 
   function handleLogin(e) {
-    e.preventDefault();
+    e.preventDefault()
   }
 
   return (
@@ -25,23 +19,13 @@ function Login() {
           id="username"
           type="text"
           name="username"
-          value={formData.username}
+          value={username}
           onChange={handleChange}
         />
       </div>
-      <label for="password">Password</label>
-      <div>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-        />      
-      </div>
       <button type="submit">Login</button>
     </form>
-  );
+  )
 }
 
-export default Login;
+export default Login
