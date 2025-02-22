@@ -33,7 +33,7 @@ Router: the `useNavigate` hook. Using it in our application is pretty
 straightforward:
 
 - First, we import it into the component in which we want to use it; in this
-case, we'll be importing into our `App` component: `import { useNavigate } from
+case, we'll be importing into our `Layout` component: `import { useNavigate } from
 "react-router-dom";`.
 
 - Next, we need to invoke our `useNavigate` hook within our component and save
@@ -44,50 +44,50 @@ simplicity: `const navigate = useNavigate()`.
 route we want to navigate our user to as an argument to the `navigate` function.
 `navigate("/")`.
 
-Let's update our `App` component to include some programmatic navigation logic,
+Let's update our `Layout` component to include some programmatic navigation logic,
 as well as some state management logic that mocks user authentication:
 
 ```jsx
-// App.js
-import { useState, useEffect } from "react";
+// Layout.jsx
+import { useState, useEffect } from "react"
 // Add useNavigate to import
-import { Outlet, useNavigate} from "react-router-dom";
-import NavBar from "./components/NavBar";
+import { Outlet, useNavigate} from "react-router-dom"
+import NavBar from "./components/NavBar"
 
-function App() {
+function Layout() {
     // Add code to mock user authentication
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const navigate = useNavigate()
 
   const login = () =>{
-    setIsLoggedIn(true);
+    setIsLoggedIn(true)
   }
 
   const logout = () =>{
-    setIsLoggedIn(false);
-  };
+    setIsLoggedIn(false)
+  }
 
     // Add programmatic navigation for login and logout
   useEffect(() =>{
     if (isLoggedIn) {
         // navigates to Home route if user is logged in
-      navigate("/");
+      navigate("/")
     } else {
         // navigates to Login route if user is logged out
-      navigate("/login");
-    };
-  }, [isLoggedIn]);
+      navigate("/login")
+    }
+  }, [isLoggedIn])
 
   return (
-    <div className="app">
+    <div className="layout">
       <NavBar logout={logout} />
         { /*Pass login function to Outlet as context */}
       <Outlet context={login}/>
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default Layout
 ```
 
 >**Note:** We placed our call to `navigate` within our `useEffect` because we
@@ -101,8 +101,8 @@ export default App;
 Now, we can update our `NavBar` component to handle user logout functionality.
 
 ```jsx
-// NavBar.js
-import { NavLink} from "react-router-dom";
+// NavBar.jsx
+import { NavLink} from "react-router-dom"
 import "./NavBar.css"
 function NavBar({ logout }) {
 
@@ -123,39 +123,33 @@ function NavBar({ logout }) {
       {/* Add the logout function to handle the onClick event */}
       <button onClick={logout}>Logout</button>
     </nav>
-  );
-};
+  )
+}
 
-export default NavBar;
+export default NavBar
 ```
 
 And we can update our `Login` component to handle user login.
 
 ```jsx
-// Login.js
-import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+// Login.jsx
+import { useState } from "react"
+import { useOutletContext } from "react-router-dom"
 
 function Login() {
   // Access the login function passed as context
-  const login = useOutletContext();
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
+  const login = useOutletContext()
+  const [username, setUsername] = useState("")
 
   function handleChange(e) {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+    setUsername(e.target.value)
+  }
 
   // Create a function that calls the login function when the form is submitted
   function handleLogin(e) {
-    e.preventDefault();
-    login();
-  };
+    e.preventDefault()
+    login()
+  }
 
   return (
     <form onSubmit={handleLogin}>
@@ -165,26 +159,16 @@ function Login() {
           id="username"
           type="text"
           name="username"
-          value={formData.username}
+          value={username}
           onChange={handleChange}
         />
       </div>
-      <label for="password">Password</label>
-      <div>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-        />      
-      </div>
       <button type="submit">Login</button>
   </form>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
 ```
 
 ## The Navigate Component
@@ -202,42 +186,42 @@ rendering our `NavBar` component we can render a `Navigate` component that will
 navigate to the `/login` endpoint if the user is not logged in:
 
 ```jsx
-// App.js
-import { useState, useEffect} from "react";
-import { Outlet, Navigate, useNavigate} from "react-router-dom";
-import NavBar from "./components/NavBar";
+// Layout.jsx
+import { useState, useEffect} from "react"
+import { Outlet, Navigate, useNavigate} from "react-router-dom"
+import NavBar from "./components/NavBar"
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
+function Layout() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const navigate = useNavigate()
 
 
    const login = () =>{
-    setIsLoggedIn(true);
-  };
+    setIsLoggedIn(true)
+  }
 
   const logout = () =>{
-    setIsLoggedIn(false);
-  };
+    setIsLoggedIn(false)
+  }
 
   useEffect(() =>{
     if (isLoggedIn) {
-      navigate("/");
+      navigate("/")
     } else {
-      navigate("/login");
+      navigate("/login")
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn])
 
   return (
-    <div className="app">
+    <div className="layout">
 {/* Add conditional rendering so users have to be logged in to see pages on the site */}
       {isLoggedIn ? <NavBar logout={logout}  /> : <Navigate to="/login" />}
       <Outlet context={login}/>
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default Layout
 ```
 
 This means that any user who visits our app and is not logged in will only see
