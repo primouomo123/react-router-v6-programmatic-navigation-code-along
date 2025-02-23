@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import Home from "./pages/Home"
-import About from "./pages/About"
-import Login from "./pages/Login"
-import ErrorPage from "./pages/ErrorPage"
+import Home from "./components/Home"
+import About from "./components/About"
+import Login from "./components/Login"
+import ErrorPage from "./components/ErrorPage"
 import Layout from "./components/Layout"
 
 function App() {
