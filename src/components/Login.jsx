@@ -13,7 +13,7 @@ function Login() {
 
   return (
     <form onSubmit={handleLogin}>
-      <label for="username">Username</label>
+      <label htmlFor="username">Username</label>
       <div>
         <input
           id="username"
