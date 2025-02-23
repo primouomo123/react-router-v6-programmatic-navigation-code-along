@@ -220,7 +220,7 @@ invoke any other component, then pass it a `to` prop that points toward a route
 endpoint: `<Navigate to="/login" />`.
 
 This component is particularly useful in cases where you need to handle some
-conditional rendering. For example, in the App component below, instead of
+conditional rendering. For example, in the `Layout` component below, instead of
 rendering our `NavBar` component we can render a `Navigate` component that will
 navigate to the `/login` endpoint if the user is not logged in.
 
