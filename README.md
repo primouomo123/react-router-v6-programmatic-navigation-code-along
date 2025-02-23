@@ -47,16 +47,53 @@ route we want to navigate our user to as an argument to the `navigate` function.
 Let's update our `Layout` component to include some programmatic navigation logic,
 as well as some state management logic that mocks user authentication:
 
+1. Add user authentication logic to `Layout.jsx`:
+
 ```jsx
 // Layout.jsx
+// import useState
+import { useState } from "react"
+import { Outlet } from "react-router-dom"
+import NavBar from "./components/NavBar"
+
+function Layout() {
+  // Add code to mock user authentication
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  const login = () =>{
+    setIsLoggedIn(true)
+  }
+
+  const logout = () =>{
+    setIsLoggedIn(false)
+  }
+
+  return (
+    <div className="layout">
+      { /* Pass logout as a prop to Navbar */}
+      <NavBar logout={logout} />
+        { /*Pass login function to Outlet as context */}
+      <Outlet context={login}/>
+    </div>
+  )
+}
+
+export default Layout
+```
+
+2. Import useNavigate and add useEffect to route by login status
+
+```jsx
+// Layout.jsx
+// import useEffect
 import { useState, useEffect } from "react"
-// Add useNavigate to import
+// import useNavigate
 import { Outlet, useNavigate} from "react-router-dom"
 import NavBar from "./components/NavBar"
 
 function Layout() {
-    // Add code to mock user authentication
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  // call useNavigate and define navigate function
   const navigate = useNavigate()
 
   const login = () =>{
@@ -81,7 +118,6 @@ function Layout() {
   return (
     <div className="layout">
       <NavBar logout={logout} />
-        { /*Pass login function to Outlet as context */}
       <Outlet context={login}/>
     </div>
   )
@@ -98,12 +134,14 @@ export default Layout
 >only call `navigate` once our state has updated. You don't always have to put
 >`navigate` inside of a `useEffect`, but it makes sense to do so in this case.
 
-Now, we can update our `NavBar` component to handle user logout functionality.
+3. Update our `NavBar` component to handle user logout functionality.
 
 ```jsx
 // NavBar.jsx
 import { NavLink} from "react-router-dom"
 import "./NavBar.css"
+
+// destructure logout from props object
 function NavBar({ logout }) {
 
   return (
@@ -120,7 +158,7 @@ function NavBar({ logout }) {
       >
         About
       </NavLink>
-      {/* Add the logout function to handle the onClick event */}
+      {/* Add a button with the logout function to handle the onClick event */}
       <button onClick={logout}>Logout</button>
     </nav>
   )
@@ -129,11 +167,12 @@ function NavBar({ logout }) {
 export default NavBar
 ```
 
-And we can update our `Login` component to handle user login.
+4. Update our `Login` component to handle user login.
 
 ```jsx
 // Login.jsx
 import { useState } from "react"
+// import useOutletContext
 import { useOutletContext } from "react-router-dom"
 
 function Login() {
@@ -145,9 +184,9 @@ function Login() {
     setUsername(e.target.value)
   }
 
-  // Create a function that calls the login function when the form is submitted
   function handleLogin(e) {
     e.preventDefault()
+    // Call the login function when the form is submitted
     login()
   }
 
@@ -183,11 +222,14 @@ endpoint: `<Navigate to="/login" />`.
 This component is particularly useful in cases where you need to handle some
 conditional rendering. For example, in the App component below, instead of
 rendering our `NavBar` component we can render a `Navigate` component that will
-navigate to the `/login` endpoint if the user is not logged in:
+navigate to the `/login` endpoint if the user is not logged in.
+
+5. Add conditional rendering so users have to be logged in to see pages on the site.
 
 ```jsx
 // Layout.jsx
 import { useState, useEffect} from "react"
+// import Navigate component
 import { Outlet, Navigate, useNavigate} from "react-router-dom"
 import NavBar from "./components/NavBar"
 
