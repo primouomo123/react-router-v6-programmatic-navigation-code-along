@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react"
-import { Outlet, useNavigate} from "react-router-dom"
+import { Outlet, Navigate, useNavigate} from "react-router-dom"
 import NavBar from "./NavBar"
 
 function Layout() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  // call useNavigate and define navigate function 
   const navigate = useNavigate()
 
-  const login = () =>{
+
+   const login = () =>{
     setIsLoggedIn(true)
   }
 
@@ -15,21 +15,18 @@ function Layout() {
     setIsLoggedIn(false)
   }
 
-    // Add programmatic navigation for login and logout
   useEffect(() =>{
     if (isLoggedIn) {
-        // navigates to Home route if user is logged in
       navigate("/")
     } else {
-        // navigates to Login route if user is logged out
       navigate("/login")
     }
   }, [isLoggedIn])
 
   return (
     <div className="layout">
-      <NavBar logout={logout} />
-        { /*Pass login function to Outlet as context */}
+{/* Add conditional rendering so users have to be logged in to see pages on the site */}
+      {isLoggedIn ? <NavBar logout={logout}  /> : <Navigate to="/login" />}
       <Outlet context={login}/>
     </div>
   )
